@@ -1,0 +1,15 @@
+[Unit]
+Description=MagoCode outbound agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/taskit/magocode-agent
+ExecStart=/usr/bin/node /home/taskit/magocode-agent/src/index.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=default.target
