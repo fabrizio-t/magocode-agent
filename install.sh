@@ -79,7 +79,7 @@ esac
 ensure_apt_dependencies() {
   export DEBIAN_FRONTEND=noninteractive
   apt-get update
-  apt-get install -y ca-certificates curl git build-essential python3 make g++ nodejs npm
+  apt-get install -y ca-certificates curl git build-essential python3 make g++
 }
 
 node_major() {
@@ -93,7 +93,7 @@ node_major() {
 ensure_node_runtime() {
   local major
   major="$(node_major)"
-  if [ "$major" -ge 20 ]; then
+  if [ "$major" -ge 20 ] && command -v npm >/dev/null 2>&1; then
     return
   fi
 
@@ -103,6 +103,7 @@ ensure_node_runtime() {
 
   major="$(node_major)"
   [ "$major" -ge 20 ] || fail "Node.js 20+ is required"
+  command -v npm >/dev/null 2>&1 || fail "npm is required but was not installed with Node.js"
 }
 
 user_home() {
