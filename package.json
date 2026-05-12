@@ -1,8 +1,8 @@
 {
   "name": "magocode-agent",
   "version": "0.1.0",
-  "private": true,
-  "license": "UNLICENSED",
+  "private": false,
+  "license": "MIT",
   "description": "Outbound MagoCode agent for self-hosted and VPS nodes.",
   "type": "commonjs",
   "bin": {

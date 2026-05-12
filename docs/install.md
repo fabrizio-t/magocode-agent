@@ -7,7 +7,7 @@ The agent is installed from a git checkout and runs as a systemd user service un
 Create an agent API key in MagoCode, then run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/magocode/magocode-agent/main/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
+curl -fsSL https://raw.githubusercontent.com/fabrizio-t/magocode-agent/v0.1.0/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
 ```
 
 The installer defaults to:
@@ -35,7 +35,7 @@ MAGOCODE_API_URL=https://api.magocode.com \
   sudo -E bash install.sh --api-key 'agent-sub:secret'
 ```
 
-Do not create a nested git repository inside the main MagoCode monorepo. Create the public `magocode-agent` repository separately when the package boundary is ready.
+Do not create a nested git repository inside the main MagoCode monorepo. The standalone `magocode-agent` repository should be maintained as its own repository and installed by release tag.
 
 ## Status
 
