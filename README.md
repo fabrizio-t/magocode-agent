@@ -33,28 +33,28 @@ Current capabilities:
 
 Path-scoped file access is limited to:
 
-- `/home/taskit/**`
-- `/tmp/taskit-*`
+- `/home/magocode/**`
+- `/tmp/magocode-*`
 
 ## Configuration
 
 By default the agent reads:
 
 ```text
-/home/taskit/.taskit.json
+/home/magocode/.magocode.json
 ```
 
 Override with:
 
 ```bash
-TASKIT_AGENT_CONFIG=/path/to/config.json npm start
+MAGOCODE_AGENT_CONFIG=/path/to/config.json npm start
 ```
 
 Example config:
 
 ```json
 {
-  "instance": "https://taskit.fly.dev",
+  "instance": "https://api.magocode.com",
   "apiKey": "agent-vps-example:secret"
 }
 ```
@@ -82,7 +82,7 @@ npm start
 For local testing:
 
 ```bash
-TASKIT_AGENT_CONFIG=./taskit-agent.local.json npm start
+MAGOCODE_AGENT_CONFIG=./magocode-agent.local.json npm start
 ```
 
 ## Release

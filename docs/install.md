@@ -1,6 +1,6 @@
 # Install MagoCode Agent
 
-The agent is installed from a git checkout and runs as a systemd user service under the `taskit` Linux user.
+The agent is installed from a git checkout and runs as a systemd user service under the `magocode` Linux user.
 
 ## Install
 
@@ -19,7 +19,7 @@ https://api.magocode.com
 The API key is stored at:
 
 ```text
-/home/taskit/.taskit.json
+/home/magocode/.magocode.json
 ```
 
 with `600` permissions.
@@ -40,19 +40,19 @@ Do not create a nested git repository inside the main MagoCode monorepo. The sta
 ## Status
 
 ```bash
-systemctl --machine taskit@ --user status magocode-agent
+systemctl --machine magocode@ --user status magocode-agent
 ```
 
 ## Logs
 
 ```bash
-journalctl --machine taskit@ --user -u magocode-agent -n 100 --no-pager
+journalctl --machine magocode@ --user -u magocode-agent -n 100 --no-pager
 ```
 
 ## Diagnostics
 
 ```bash
-sudo bash /home/taskit/magocode-agent/scripts/print-diagnostics.sh
+sudo bash /home/magocode/magocode-agent/scripts/print-diagnostics.sh
 ```
 
 Diagnostics redact the API key before printing config.
@@ -72,16 +72,16 @@ The installer fetches the repository, checks out the ref, runs `npm install --om
 Stop and remove the service:
 
 ```bash
-sudo bash /home/taskit/magocode-agent/uninstall.sh
+sudo bash /home/magocode/magocode-agent/uninstall.sh
 ```
 
 Also remove config and files:
 
 ```bash
-sudo bash /home/taskit/magocode-agent/uninstall.sh --purge-config --remove-files
+sudo bash /home/magocode/magocode-agent/uninstall.sh --purge-config --remove-files
 ```
 
-The `taskit` user is not deleted by default.
+The `magocode` user is not deleted by default.
 
 ## Security Notes
 

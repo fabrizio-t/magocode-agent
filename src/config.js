@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 
-const DEFAULT_CONFIG_PATH = process.env.TASKIT_AGENT_CONFIG || '/home/taskit/.taskit.json';
+const DEFAULT_CONFIG_PATH = process.env.MAGOCODE_AGENT_CONFIG || '/home/magocode/.magocode.json';
 
 function instanceToAgentUrl(instance) {
   const base = String(instance || '').replace(/\/$/, '');

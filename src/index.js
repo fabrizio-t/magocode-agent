@@ -9,11 +9,11 @@ const pty = require('node-pty');
 
 const { readConfig } = require('./config.js');
 const { parseMessage, serializeMessage } = require('./protocol.js');
-const { isAllowedTaskitPath, unwrapTaskitSuCommand } = require('./shell.js');
+const { isAllowedMagoCodePath, unwrapMagoCodeSuCommand } = require('./shell.js');
 const { CAPABILITIES, VERSION } = require('./version.js');
 
 const RECONNECT_MS = Number(process.env.MAGOCODE_AGENT_RECONNECT_MS || 5000);
-const DEFAULT_CWD = process.env.MAGOCODE_AGENT_CWD || '/home/taskit';
+const DEFAULT_CWD = process.env.MAGOCODE_AGENT_CWD || '/home/magocode';
 
 let ws = null;
 let reconnectTimer = null;
@@ -94,8 +94,8 @@ function startTail(message) {
   const path = String(message.path || '');
   if (!id || !path) return send({ id, type: 'error', code: 'EINVAL', message: 'id and path are required' });
   if (tails.has(id)) stopTail(id, 'restarted');
-  if (!path.startsWith('/home/taskit/')) {
-    return send({ id, type: 'error', code: 'EACCES', message: 'tail path must be under /home/taskit' });
+  if (!path.startsWith('/home/magocode/')) {
+    return send({ id, type: 'error', code: 'EACCES', message: 'tail path must be under /home/magocode' });
   }
 
   const child = spawn('tail', ['-n', message.fromStart === false ? '0' : '+1', '-F', path], {
@@ -122,9 +122,9 @@ function startTail(message) {
   });
 }
 
-function assertTaskitPath(id, path) {
-  if (!isAllowedTaskitPath(path)) {
-    send({ id, type: 'error', code: 'EACCES', message: 'path must be under /home/taskit or /tmp/taskit-*' });
+function assertMagoCodePath(id, path) {
+  if (!isAllowedMagoCodePath(path)) {
+    send({ id, type: 'error', code: 'EACCES', message: 'path must be under /home/magocode or /tmp/magocode-*' });
     return false;
   }
   return true;
@@ -135,7 +135,7 @@ function runExec(message) {
   const cmd = String(message.cmd || '');
   if (!id || !cmd) return send({ id, type: 'error', code: 'EINVAL', message: 'id and cmd are required' });
   const timeout = Math.max(1000, Math.min(Number(message.timeoutMs) || 30000, 10 * 60 * 1000));
-  childExec(unwrapTaskitSuCommand(cmd), {
+  childExec(unwrapMagoCodeSuCommand(cmd), {
     cwd: DEFAULT_CWD,
     timeout,
     maxBuffer: 1024 * 1024,
@@ -155,7 +155,7 @@ function runExec(message) {
 function writeFile(message) {
   const id = String(message.id || '');
   const path = String(message.path || '');
-  if (!assertTaskitPath(id, path)) return;
+  if (!assertMagoCodePath(id, path)) return;
   let data;
   try {
     data = Buffer.from(String(message.b64Contents || ''), 'base64');
@@ -178,7 +178,7 @@ function writeFile(message) {
 function readFile(message) {
   const id = String(message.id || '');
   const path = String(message.path || '');
-  if (!assertTaskitPath(id, path)) return;
+  if (!assertMagoCodePath(id, path)) return;
   fs.readFile(path, (err, data) => {
     if (err) return send({ id, type: 'error', code: err.code || 'EREAD', message: err.message });
     send({ id, type: 'readFile.result', b64Contents: data.toString('base64') });
@@ -188,7 +188,7 @@ function readFile(message) {
 function fileExists(message) {
   const id = String(message.id || '');
   const path = String(message.path || '');
-  if (!assertTaskitPath(id, path)) return;
+  if (!assertMagoCodePath(id, path)) return;
   fs.access(path, fs.constants.F_OK, (err) => {
     send({ id, type: 'fileExists.result', exists: !err });
   });
@@ -201,7 +201,7 @@ function openPty(message) {
   const cols = Math.max(20, Math.min(500, parseInt(message.cols, 10) || 120));
   const rows = Math.max(5, Math.min(200, parseInt(message.rows, 10) || 40));
   const term = String(message.term || 'xterm-256color');
-  const cmd = unwrapTaskitSuCommand(String(message.cmd || 'bash'));
+  const cmd = unwrapMagoCodeSuCommand(String(message.cmd || 'bash'));
   let child;
   try {
     child = pty.spawn('/bin/bash', ['-lc', cmd], {
@@ -209,7 +209,7 @@ function openPty(message) {
       cols,
       rows,
       cwd: DEFAULT_CWD,
-      env: { ...process.env, TERM: term, HOME: DEFAULT_CWD, USER: 'taskit' },
+      env: { ...process.env, TERM: term, HOME: DEFAULT_CWD, USER: 'magocode' },
     });
   } catch (err) {
     return send({ id, type: 'error', code: err.code || 'PTY_OPEN_FAILED', message: err.message });

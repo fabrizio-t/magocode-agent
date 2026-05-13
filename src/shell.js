@@ -4,10 +4,10 @@ function unescapeShellSingleQuotes(value) {
   return String(value).replace(/'\\''/g, "'");
 }
 
-function unwrapTaskitSuCommand(cmd) {
+function unwrapMagoCodeSuCommand(cmd) {
   cmd = String(cmd || '').trim();
-  const prefix = "su - taskit -c '";
-  const doublePrefix = 'su - taskit -c "';
+  const prefix = "su - magocode -c '";
+  const doublePrefix = 'su - magocode -c "';
   const activePrefix = cmd.startsWith(prefix) ? prefix : (cmd.startsWith(doublePrefix) ? doublePrefix : '');
   if (!activePrefix) return cmd;
   const quote = activePrefix === prefix ? "'" : '"';
@@ -30,15 +30,15 @@ function unwrapTaskitSuCommand(cmd) {
   return unescapeShellSingleQuotes(cmd);
 }
 
-function isAllowedTaskitPath(path) {
+function isAllowedMagoCodePath(path) {
   return typeof path === 'string'
     && path.length > 0
     && !path.includes('\0')
-    && (path.startsWith('/home/taskit/') || path.startsWith('/tmp/taskit-'));
+    && (path.startsWith('/home/magocode/') || path.startsWith('/tmp/magocode-'));
 }
 
 module.exports = {
   unescapeShellSingleQuotes,
-  unwrapTaskitSuCommand,
-  isAllowedTaskitPath,
+  unwrapMagoCodeSuCommand,
+  isAllowedMagoCodePath,
 };

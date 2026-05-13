@@ -7,7 +7,7 @@ const { instanceToAgentUrl } = require('../src/config.js');
 
 describe('config', () => {
   it('maps HTTP(S) instances to WebSocket agent URLs', () => {
-    assert.equal(instanceToAgentUrl('https://taskit.fly.dev'), 'wss://taskit.fly.dev/agent');
+    assert.equal(instanceToAgentUrl('https://api.magocode.com'), 'wss://api.magocode.com/agent');
     assert.equal(instanceToAgentUrl('http://localhost:3000/'), 'ws://localhost:3000/agent');
   });
 
@@ -17,6 +17,6 @@ describe('config', () => {
   });
 
   it('rejects unsupported instances', () => {
-    assert.throws(() => instanceToAgentUrl('taskit.fly.dev'), /instance must start/);
+    assert.throws(() => instanceToAgentUrl('api.magocode.com'), /instance must start/);
   });
 });

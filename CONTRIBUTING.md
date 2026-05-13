@@ -13,14 +13,14 @@ npm start
 For local testing, point the agent at a local config:
 
 ```bash
-TASKIT_AGENT_CONFIG=./taskit-agent.local.json npm start
+MAGOCODE_AGENT_CONFIG=./magocode-agent.local.json npm start
 ```
 
 ## Pull Requests
 
 - Keep changes focused.
 - Add or update tests for behavior changes.
-- Do not commit local `.taskit*.json` config files or API keys.
+- Do not commit local `.magocode*.json` config files or API keys.
 - Do not broaden command or file-system access without documenting the security impact.
 
 ## Release Notes

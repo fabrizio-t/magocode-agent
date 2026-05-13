@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-AGENT_USER="${MAGOCODE_AGENT_USER:-taskit}"
+AGENT_USER="${MAGOCODE_AGENT_USER:-magocode}"
 PURGE_CONFIG="false"
 REMOVE_FILES="false"
 
@@ -20,10 +20,10 @@ Usage:
   sudo bash uninstall.sh [--purge-config] [--remove-files]
 
 Options:
-  --purge-config  Remove /home/taskit/.taskit.json.
-  --remove-files  Remove /home/taskit/magocode-agent.
+  --purge-config  Remove /home/magocode/.magocode.json.
+  --remove-files  Remove /home/magocode/magocode-agent.
 
-The taskit user is not deleted.
+The magocode user is not deleted.
 USAGE
 }
 
@@ -58,7 +58,7 @@ AGENT_HOME="$(getent passwd "$AGENT_USER" | cut -d: -f6)"
 [ -n "$AGENT_HOME" ] || fail "could not resolve home directory for '$AGENT_USER'"
 
 INSTALL_DIR="$AGENT_HOME/magocode-agent"
-CONFIG_PATH="$AGENT_HOME/.taskit.json"
+CONFIG_PATH="$AGENT_HOME/.magocode.json"
 SERVICE_PATH="$AGENT_HOME/.config/systemd/user/magocode-agent.service"
 UID_VALUE="$(id -u "$AGENT_USER")"
 

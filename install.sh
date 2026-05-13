@@ -4,7 +4,7 @@ set -euo pipefail
 DEFAULT_API_URL="https://api.magocode.com"
 DEFAULT_AGENT_REPO="https://github.com/magocode/magocode-agent.git"
 DEFAULT_AGENT_REF="main"
-DEFAULT_AGENT_USER="taskit"
+DEFAULT_AGENT_USER="magocode"
 
 API_URL="${MAGOCODE_API_URL:-$DEFAULT_API_URL}"
 AGENT_REPO="${MAGOCODE_AGENT_REPO:-$DEFAULT_AGENT_REPO}"
@@ -30,7 +30,7 @@ Internal/dev overrides:
   MAGOCODE_API_URL=https://api.magocode.com
   MAGOCODE_AGENT_REPO=https://github.com/magocode/magocode-agent.git
   MAGOCODE_AGENT_REF=main
-  MAGOCODE_AGENT_USER=taskit
+  MAGOCODE_AGENT_USER=magocode
 USAGE
 }
 
@@ -131,7 +131,7 @@ ExecStart=$(command -v node) $INSTALL_DIR/src/index.js
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
-Environment=TASKIT_AGENT_CONFIG=$CONFIG_PATH
+Environment=MAGOCODE_AGENT_CONFIG=$CONFIG_PATH
 
 [Install]
 WantedBy=default.target
@@ -164,8 +164,8 @@ AGENT_HOME="$(user_home)"
 [ -n "$AGENT_HOME" ] || fail "could not resolve home directory for '$AGENT_USER'"
 
 INSTALL_DIR="$AGENT_HOME/magocode-agent"
-CONFIG_PATH="$AGENT_HOME/.taskit.json"
-LOG_DIR="$AGENT_HOME/taskit-logs"
+CONFIG_PATH="$AGENT_HOME/.magocode.json"
+LOG_DIR="$AGENT_HOME/magocode-logs"
 SERVICE_DIR="$AGENT_HOME/.config/systemd/user"
 
 mkdir -p "$LOG_DIR" "$SERVICE_DIR"

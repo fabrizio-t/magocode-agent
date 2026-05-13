@@ -62,7 +62,7 @@ Agent-to-server:
   "id": "request-id",
   "type": "error",
   "code": "EACCES",
-  "message": "path must be under /home/taskit or /tmp/taskit-*"
+  "message": "path must be under /home/magocode or /tmp/magocode-*"
 }
 ```
 

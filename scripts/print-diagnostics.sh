@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-AGENT_USER="${MAGOCODE_AGENT_USER:-taskit}"
+AGENT_USER="${MAGOCODE_AGENT_USER:-magocode}"
 
 section() {
   printf '\n== %s ==\n' "$1"
@@ -16,7 +16,7 @@ else
 fi
 
 INSTALL_DIR="$AGENT_HOME/magocode-agent"
-CONFIG_PATH="$AGENT_HOME/.taskit.json"
+CONFIG_PATH="$AGENT_HOME/.magocode.json"
 
 section "System"
 uname -a || true
