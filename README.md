@@ -66,7 +66,7 @@ Example config:
 The first standalone install flow uses a git checkout on the VPS and a systemd user service:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fabrizio-t/magocode-agent/v0.1.0/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
+curl -fsSL https://raw.githubusercontent.com/fabrizio-t/magocode-agent/v0.2.1/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
 ```
 
 See [docs/install.md](docs/install.md).
@@ -92,7 +92,7 @@ Production installs should use a release tag, not `main`.
 Current baseline:
 
 ```text
-v0.1.0
+v0.2.1
 ```
 
 ## License
