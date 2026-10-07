@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Test (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      # Builds node-pty, so the suite also covers the pty capability here.
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+  shell:
+    name: Shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Syntax
+        run: |
+          for script in install.sh uninstall.sh scripts/print-diagnostics.sh; do
+            bash -n "$script"
+          done
+
+      # Errors only for now; tighten to warnings once the scripts are clean.
+      - name: ShellCheck
+        run: shellcheck --severity=error install.sh uninstall.sh scripts/print-diagnostics.sh

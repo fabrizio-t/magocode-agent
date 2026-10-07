@@ -2,8 +2,10 @@
 set -euo pipefail
 
 DEFAULT_API_URL="https://api.magocode.com"
-DEFAULT_AGENT_REPO="https://github.com/magocode/magocode-agent.git"
-DEFAULT_AGENT_REF="main"
+# Keep the ref equal to the release tag of this checkout (v<package.json version>).
+# test/version.test.js fails the build when they drift.
+DEFAULT_AGENT_REPO="https://github.com/fabrizio-t/magocode-agent.git"
+DEFAULT_AGENT_REF="v0.3.0"
 DEFAULT_AGENT_USER="magocode"
 
 API_URL="${MAGOCODE_API_URL:-$DEFAULT_API_URL}"
@@ -28,8 +30,8 @@ Usage:
 
 Internal/dev overrides:
   MAGOCODE_API_URL=https://api.magocode.com
-  MAGOCODE_AGENT_REPO=https://github.com/magocode/magocode-agent.git
-  MAGOCODE_AGENT_REF=main
+  MAGOCODE_AGENT_REPO=https://github.com/fabrizio-t/magocode-agent.git
+  MAGOCODE_AGENT_REF=v0.3.0
   MAGOCODE_AGENT_USER=magocode
 USAGE
 }
@@ -132,6 +134,8 @@ Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
 Environment=MAGOCODE_AGENT_CONFIG=$CONFIG_PATH
+Environment=MAGOCODE_AGENT_HOME=$AGENT_HOME
+Environment=MAGOCODE_AGENT_USER=$AGENT_USER
 
 [Install]
 WantedBy=default.target
@@ -184,7 +188,12 @@ else
   git clone "$AGENT_REPO" "$INSTALL_DIR"
 fi
 
-git -C "$INSTALL_DIR" checkout "$AGENT_REF"
+# Releases before v0.3.0 had no committed lockfile, so their `npm install`
+# left an untracked package-lock.json that blocks checking out a newer tag.
+if ! git -C "$INSTALL_DIR" ls-files --error-unmatch package-lock.json >/dev/null 2>&1; then
+  rm -f "$INSTALL_DIR/package-lock.json"
+fi
+git -C "$INSTALL_DIR" checkout --force "$AGENT_REF"
 if git -C "$INSTALL_DIR" rev-parse --verify "origin/$AGENT_REF" >/dev/null 2>&1; then
   git -C "$INSTALL_DIR" pull --ff-only origin "$AGENT_REF"
 fi
@@ -201,7 +210,7 @@ chown "$AGENT_USER:$AGENT_USER" "$CONFIG_PATH"
 chmod 600 "$CONFIG_PATH"
 
 log "installing npm dependencies"
-run_as_agent bash -lc "cd '$INSTALL_DIR' && npm install --omit=dev --no-audit --no-fund"
+run_as_agent bash -lc "cd '$INSTALL_DIR' && npm ci --omit=dev --no-fund"
 
 log "installing systemd user service"
 install_user_service "$SERVICE_DIR"
