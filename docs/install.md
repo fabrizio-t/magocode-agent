@@ -7,7 +7,7 @@ The agent is installed from a git checkout and runs as a systemd user service un
 Create an agent API key in MagoCode, then run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fabrizio-t/magocode-agent/v0.2.1/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
+curl -fsSL https://raw.githubusercontent.com/fabrizio-t/magocode-agent/v0.3.0/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
 ```
 
 The installer defaults to:
@@ -62,10 +62,10 @@ Diagnostics redact the API key before printing config.
 Re-run the installer with the same API key and desired ref:
 
 ```bash
-MAGOCODE_AGENT_REF=v0.2.1 sudo -E bash install.sh --api-key 'agent-sub:secret'
+MAGOCODE_AGENT_REF=v0.3.0 sudo -E bash install.sh --api-key 'agent-sub:secret'
 ```
 
-The installer fetches the repository, checks out the ref, runs `npm install --omit=dev`, and restarts the service.
+The installer fetches the repository, checks out the ref, runs `npm ci --omit=dev` against the committed lockfile, and restarts the service.
 
 ## Uninstall
 

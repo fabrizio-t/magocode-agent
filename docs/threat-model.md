@@ -43,6 +43,7 @@ MagoCode Agent runs on a user-owned machine or VPS and accepts commands from Mag
 - Install by release tag, not by mutable `main`.
 - Store `/home/magocode/.magocode.json` with `600` permissions.
 - Run as the non-root `magocode` user.
-- Keep file access scoped to approved task paths.
+- Keep file operations limited to approved task paths (a guardrail; `exec` is not confined to them).
+- Review the agent audit log in journald: one line per command, PTY, tail, and file operation.
 - Revoke/delete compromised agents and reinstall with a new key.
 - Keep server-side agent API keys restricted to agent-only endpoints.

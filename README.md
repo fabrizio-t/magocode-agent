@@ -31,10 +31,12 @@ Current capabilities:
 - `fileExists`
 - `pty`
 
-Path-scoped file access is limited to:
+File operations (`writeFile`, `readFile`, `fileExists`, `tail`) are limited to:
 
 - `/home/magocode/**`
 - `/tmp/magocode-*`
+
+This is a guardrail against mistakes, not a security boundary: `exec` and `pty` already run arbitrary commands as the agent user. See [docs/protocol.md](docs/protocol.md) for limits, delivery semantics, and the audit log.
 
 ## Configuration
 
@@ -66,7 +68,7 @@ Example config:
 The first standalone install flow uses a git checkout on the VPS and a systemd user service:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fabrizio-t/magocode-agent/v0.2.1/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
+curl -fsSL https://raw.githubusercontent.com/fabrizio-t/magocode-agent/v0.3.0/install.sh | sudo bash -s -- --api-key 'agent-sub:secret'
 ```
 
 See [docs/install.md](docs/install.md).
@@ -74,10 +76,12 @@ See [docs/install.md](docs/install.md).
 ## Development
 
 ```bash
-npm install
+npm ci
 npm test
 npm start
 ```
+
+`npm ci --ignore-scripts` skips the native `node-pty` build; the agent then runs without the `pty` capability, which is enough for the test suite.
 
 For local testing:
 
@@ -92,8 +96,10 @@ Production installs should use a release tag, not `main`.
 Current baseline:
 
 ```text
-v0.2.1
+v0.3.0
 ```
+
+The release tag, the `version` in `package.json`, and `DEFAULT_AGENT_REF` in `install.sh` must match. `npm test` fails when they drift.
 
 ## License
 

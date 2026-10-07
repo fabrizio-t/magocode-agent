@@ -33,6 +33,6 @@ Expected security boundaries:
 - The agent opens outbound connections only.
 - The agent does not require inbound firewall ports.
 - Server-side authorization must treat agent API keys as machine credentials, not human user sessions.
-- File operations are scoped by the agent implementation to approved task paths.
+- File operations are limited by the agent implementation to approved task paths. This is a guardrail, not a sandbox: command execution is not restricted to those paths.
 
 If an agent API key is exposed, revoke or delete that agent in MagoCode and reinstall with a new key.
