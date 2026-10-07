@@ -1,25 +1,33 @@
 'use strict';
 
 const MAX_MESSAGE_BYTES = 1024 * 1024;
-const KNOWN_TYPES = new Set([
-  'hello',
-  'pong',
+
+// Server -> agent. Every entry must have a handler in agent.js
+// (test/agent.test.js checks the two lists stay in sync).
+const COMMAND_TYPES = new Set([
+  'ping',
   'exec',
-  'exec.result',
   'writeFile',
-  'writeFile.result',
   'readFile',
-  'readFile.result',
   'fileExists',
-  'fileExists.result',
   'tail.start',
   'tail.stop',
-  'tail.line',
-  'tail.end',
   'pty.open',
   'pty.write',
   'pty.resize',
   'pty.kill',
+]);
+
+// Agent -> server.
+const EVENT_TYPES = new Set([
+  'hello',
+  'pong',
+  'exec.result',
+  'writeFile.result',
+  'readFile.result',
+  'fileExists.result',
+  'tail.line',
+  'tail.end',
   'pty.data',
   'pty.exit',
   'error',
@@ -57,13 +65,20 @@ function serializeMessage(message) {
   return JSON.stringify(message);
 }
 
+function isCommandType(type) {
+  return COMMAND_TYPES.has(type);
+}
+
 function isKnownType(type) {
-  return KNOWN_TYPES.has(type);
+  return COMMAND_TYPES.has(type) || EVENT_TYPES.has(type);
 }
 
 module.exports = {
   MAX_MESSAGE_BYTES,
+  COMMAND_TYPES,
+  EVENT_TYPES,
   parseMessage,
   serializeMessage,
+  isCommandType,
   isKnownType,
 };
